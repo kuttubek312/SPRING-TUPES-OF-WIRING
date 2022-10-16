@@ -1,38 +1,32 @@
 package com.peaksoft;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import com.peaksoft.config.AppConfig;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfig.class)
+public class AppTest {
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+    @Autowired
+    private ApplicationContext applicationContext;
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    @Test
+    public void mainTest() {
+        String text = "На свете есть океан , на океане остров , на острове дерево , на дереве заяц , в зайце утка , в утке яйцо , в яйце иголка , смерть Кощея на игле :(";
+
+        KoscheiTheDeathless koscheiTheDeathless =
+                applicationContext.getBean(KoscheiTheDeathless.class);
+        System.out.println(koscheiTheDeathless.getRulesByDeth());
+        String testText = koscheiTheDeathless.getRulesByDeth();
+
+        if (!testText.contains(text) && testText.length() <= text.length()) {
+            Assert.fail("Тест провален, не корректная связь бинов. Итоговая фраза не верна.");
+        }
     }
 }
